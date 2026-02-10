@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Data & outputs
+data/frames/
+data/outputs/
+data/states/
+
+# Media
+*.mp4
+*.jpg
+*.png
+
+# OS
+.DS_Store
