@@ -1,0 +1,19 @@
+{
+  "intent": {
+    "style": "cinematic",
+    "pace": "slow",
+    "fps": 8,
+    "step": 12
+  },
+  "frame_count": 24,
+  "selected_frames": 2,
+  "fps": 8,
+  "style": "cinematic",
+  "screenplay": {
+    "title": "Untitled",
+    "scenes": []
+  },
+  "workflow": {
+    "steps": []
+  }
+}
