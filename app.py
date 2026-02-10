@@ -1,16 +1,20 @@
 import json
 import os
-from extract_frames import extract_frames
-from intent_api import interpret_intent
-from frame_graph_api import build_frame_graph, traverse_frame_graph
-from regenerate_api import regenerate_video
+from video_engine.extract_frames import extract_frames
+from core.intent_engine import interpret_intent
+from video_engine.frame_graph_api import build_frame_graph, traverse_frame_graph
+from video_engine.regenerate_api import regenerate_video
 
-VIDEO_PATH = "input/input.mp4"
-FRAME_DIR = "frames"
-OUTPUT_VIDEO = "output/output.mp4"
-STATE_DIR = "states"
+DATA_INPUT = os.path.join("data", "input_videos")
+DATA_FRAMES = os.path.join("data", "frames")
+DATA_OUTPUTS = os.path.join("data", "outputs")
+DATA_STATES = os.path.join("data", "states")
 
-os.makedirs(STATE_DIR, exist_ok=True)
+os.makedirs(DATA_STATES, exist_ok=True)
+
+VIDEO_PATH = os.path.join(DATA_INPUT, "input.mp4")
+FRAME_DIR = DATA_FRAMES
+OUTPUT_VIDEO = os.path.join(DATA_OUTPUTS, "output.mp4")
 
 # Step 1: Extract frames
 extract_frames(VIDEO_PATH, FRAME_DIR)
@@ -40,7 +44,7 @@ state = {
     "output_video": OUTPUT_VIDEO
 }
 
-with open(f"{STATE_DIR}/state_1.json", "w") as f:
+with open(os.path.join(DATA_STATES, "state_1.json"), "w") as f:
     json.dump(state, f, indent=2)
 
 print("[DONE] Creative state saved")
