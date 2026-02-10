@@ -2,7 +2,7 @@ import os
 import json
 import requests
 
-
+#!
 def request_intent_from_llm(prompt: str, timeout: int = 30):
     """Send the user's prompt to an external LLM endpoint and return a parsed intent dict.
 
