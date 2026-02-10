@@ -1,20 +1,30 @@
-def interpret_intent(user_input: str):
-    user_input = user_input.lower()
 from typing import Optional
 import re
+import os
 
 
-def interpret_intent(user_input: str, defaults: Optional[dict] = None) -> dict:
+def interpret_intent(user_input: str, defaults: Optional[dict] = None, use_llm: bool = False) -> dict:
     """Parse a free-text user intent into a structured dict of video requirements.
 
-    Returns keys:
-      - style, pace, fps, step
-      - target_duration (seconds, optional)
-      - mood, color_grade, transitions, narration (best-effort)
-      - explanation: short human-readable summary
-
-    `defaults` may provide fallback values for fps/step.
+    If `use_llm` is True and an LLM endpoint is configured via `LLM_API_URL`, this
+    will attempt to request a richer intent from the remote service and fall back
+    to local parsing on error.
     """
+    # Try remote first if requested
+    if use_llm:
+        try:
+            from .llm_client import request_intent_from_llm
+        except Exception:
+            request_intent_from_llm = None
+
+        if request_intent_from_llm is not None:
+            remote = request_intent_from_llm(user_input)
+            if isinstance(remote, dict):
+                if "explanation" not in remote:
+                    remote["explanation"] = f"LLM-provided intent for: {user_input}"
+                return remote
+
+    # Local parsing fallback
     if defaults is None:
         defaults = {}
 
