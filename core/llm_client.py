@@ -11,8 +11,9 @@ DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
 
 
 def _post_groq(messages, timeout: int = 30, temperature: float = 0.2) -> Optional[dict]:
-    api_key = os.environ.get("GROQ_API_KEY") or os.environ.get("LLM_API_KEY")
+    api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
+        print("[LLM CLIENT] GROQ_API_KEY not found in environment variables.")
         return None
 
     api_url = os.environ.get("GROQ_API_URL", GROQ_CHAT_COMPLETIONS_URL)
@@ -43,12 +44,14 @@ def _extract_json_object(text: str) -> Optional[dict]:
     if not text:
         return None
     try:
+        # First try direct parsing
         parsed = json.loads(text)
         if isinstance(parsed, dict):
             return parsed
     except Exception:
         pass
 
+    # Fallback: exact regex for JSON object
     match = re.search(r"\{[\s\S]*\}", text)
     if not match:
         return None
